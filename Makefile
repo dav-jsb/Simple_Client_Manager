@@ -7,3 +7,6 @@ all:
 
 run:
 	.\build\ClientManager.exe
+
+clean:
+	rm -rf ./build/*
