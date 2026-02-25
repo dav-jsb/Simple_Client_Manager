@@ -6,6 +6,4 @@
 
 void CreateDataSet();
 
-void FreeMem(Queue* queue);
-
 #endif
