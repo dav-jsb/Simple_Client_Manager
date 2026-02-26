@@ -7,16 +7,12 @@
 #include <time.h>
 #include <sqlite3.h>
 
-typedef struct{
+typedef struct Client{
+    long int id;
     char* name;
     char* email;
     char* password;
-} Client;
-
-typedef struct{
-    Client* data;
-    int front;
-    long int size;
-} Queue;
+    struct Client* next;
+}Client;
 
 #endif
