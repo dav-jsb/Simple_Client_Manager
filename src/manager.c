@@ -3,6 +3,6 @@
 #include <nested_list.h>
 
 int main() {
-    RemoveClient_Id(1);
+    RemoveClient_Email("teste@gmail.com");
     return 0;
 }
