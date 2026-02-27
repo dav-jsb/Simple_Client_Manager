@@ -10,4 +10,6 @@ Client* ReadClient_Id(long int id);
 
 Client* ReadClient_Email(const char* email);
 
+int RemoveClient_Id(long int id);
+
 #endif

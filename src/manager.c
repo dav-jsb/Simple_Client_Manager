@@ -3,9 +3,6 @@
 #include <nested_list.h>
 
 int main() {
-    Client* head = NULL;
-    head = ReadClient_Email("teste@gmail.com");
-    PrintList(head);
-    FreeMem(head);
+    RemoveClient_Id(1);
     return 0;
 }

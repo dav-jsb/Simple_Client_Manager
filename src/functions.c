@@ -96,7 +96,7 @@ Client* ReadClient_Id(long int id){
     }
 
     else{
-        printf("Execution error!");
+        printf("Execution error: %s", sqlite3_errmsg(db));
     }
 
     sqlite3_finalize(stmt);
@@ -142,10 +142,51 @@ Client* ReadClient_Email(const char* email){
     }
 
     else{
-        printf("Execution error!");
+        printf("Execution error: %s", sqlite3_errmsg(db));
     }
 
     sqlite3_finalize(stmt);
     sqlite3_close(db);
     return head;
+}
+
+int RemoveClient_Id(long int id){
+    sqlite3* db = NULL;
+    sqlite3_stmt* stmt = NULL;
+
+    if (sqlite3_open("./src/database.db", &db)){
+        printf("Database connection error!\n");
+        return 1;
+    }
+
+    const char* sqlcmm1 = "DELETE FROM Clients WHERE Id = ?";
+
+    if (sqlite3_prepare_v2(db, sqlcmm1, -1, &stmt, NULL)){
+        printf("SQL error: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return 1;
+    }
+
+    sqlite3_bind_int64(stmt, 1, id);
+    printf("Searching client with id: %d...\n", id);
+
+    int rc = sqlite3_step(stmt);
+
+    if (rc == SQLITE_DONE){
+        if (sqlite3_changes(db) > 0){
+            printf("Sucessfully deleted client!\n");
+        }
+
+        else{
+            printf("No found client with id: %ld", id);
+        }
+    }
+
+    else{
+        printf("Execution error: %s", sqlite3_errmsg(db));
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+    return 0;
 }
