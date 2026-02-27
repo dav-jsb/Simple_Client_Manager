@@ -8,4 +8,6 @@ int InsertClient(Client* head);
 
 Client* ReadClient_Id(long int id);
 
+Client* ReadClient_Email(const char* email);
+
 #endif

@@ -31,6 +31,11 @@ Client* CreateNode(
         printf("Create node error!\n");
         return NULL;
     }
+
+    head->name = NULL;
+    head->email = NULL;
+    head->password = NULL;
+    head->next = NULL;
     
     if (
         (head->name = (char*) malloc(sizeof(char) * (strlen(name) + 1))) == NULL ||
@@ -41,8 +46,7 @@ Client* CreateNode(
         FreeHead(head);
         return NULL;
     }
-    
-    head->next = NULL;
+
     head->id = id;
     strcpy(head->name, name);
     strcpy(head->email, email);

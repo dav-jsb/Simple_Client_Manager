@@ -103,3 +103,49 @@ Client* ReadClient_Id(long int id){
     sqlite3_close(db);
     return head;
 }
+
+Client* ReadClient_Email(const char* email){
+    Client* head = NULL;
+    sqlite3* db = NULL;
+    sqlite3_stmt* stmt = NULL;
+    int rc = 0;
+
+    if (sqlite3_open("./src/database.db", &db)){
+        printf("Database conection error!\n");
+        return NULL;
+    }
+
+    char* sqlcmm = "SELECT Id, Name, Email, Password FROM Clients "\
+    "WHERE Email LIKE ?;";
+
+    if (sqlite3_prepare_v2(db, sqlcmm, -1, &stmt, NULL)){
+        printf("SQL error: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return NULL;
+    }
+
+    sqlite3_bind_text(stmt, 1, email, -1, SQLITE_STATIC);
+    printf("Searching client with Email: %s...\n", email);
+    rc = sqlite3_step(stmt);
+
+    if (rc == SQLITE_ROW){
+        int returnedId = sqlite3_column_int(stmt, 0);
+        const char* returnedName = (const char*) sqlite3_column_text(stmt, 1);
+        const char* returnedEmail = (const char*) sqlite3_column_text(stmt, 2);
+        const char* returnedPassword = (const char*) sqlite3_column_text(stmt, 3);
+
+        head = Push(head, returnedId, returnedName, returnedEmail, returnedPassword);
+    }
+
+    else if (rc == SQLITE_DONE){
+        printf("No user found with email: %s\n", email);
+    }
+
+    else{
+        printf("Execution error!");
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+    return head;
+}

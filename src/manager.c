@@ -4,7 +4,7 @@
 
 int main() {
     Client* head = NULL;
-    head = ReadClient_Id(1);
+    head = ReadClient_Email("teste@gmail.com");
     PrintList(head);
     FreeMem(head);
     return 0;
