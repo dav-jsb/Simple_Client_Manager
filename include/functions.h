@@ -2,7 +2,8 @@
 #define FUNCTIONS_H
 
 #include <constants.h>
+#include <nested_list.h>
 
-void CreateDataSet();
+int InsertClient(Client* head);
 
 #endif

@@ -28,7 +28,7 @@ Client* CreateNode(
     Client* head = NULL;
 
     if ((head = (Client*) malloc(sizeof(Client))) == NULL){
-        printf("Create node error!");
+        printf("Create node error!\n");
         return NULL;
     }
     
@@ -37,7 +37,7 @@ Client* CreateNode(
         (head->email = (char*) malloc(sizeof(char) * (strlen(email) + 1))) == NULL ||
         (head->password = (char*) malloc(sizeof(char) * (strlen(password) + 1))) == NULL
     ){
-        printf("Memory allocation error!");
+        printf("Memory allocation error!\n");
         FreeHead(head);
         return NULL;
     }
@@ -78,7 +78,7 @@ void RemoveList(Client* head, long int id){
 
     if (head == NULL){
         boolean = 1;
-        printf("Empty list!");
+        printf("Empty list!\n");
     }
     
     if (!boolean && head->id == id){
@@ -97,20 +97,22 @@ void RemoveList(Client* head, long int id){
             FreeHead(temp2);
             boolean = 1;
         }
+
+        temp = temp->next;
     }
 
     if (!boolean){
-        printf("Client is not in list!");
+        printf("Client is not in list!\n");
     }
 
     else{
-        printf("Sucessfully removed element!");
+        printf("Sucessfully removed element!\n");
     }
 }
 
 void PrintList(Client* head){
     if (head == NULL){
-        printf("Empty list!");
+        printf("Empty list!\n");
     }
 
     else{
