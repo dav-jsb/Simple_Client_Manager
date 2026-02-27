@@ -6,4 +6,6 @@
 
 int InsertClient(Client* head);
 
+Client* ReadClient_Id(long int id);
+
 #endif

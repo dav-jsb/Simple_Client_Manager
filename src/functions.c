@@ -4,7 +4,7 @@ int InsertClient(Client* head){
     sqlite3* db = NULL;
     int rc = 0;
     
-    if (rc = sqlite3_open("./src/database.db", &db)){
+    if ((rc = sqlite3_open("./src/database.db", &db))){
         printf("Database connection error!\n");
         return 1;
     }
@@ -17,7 +17,7 @@ int InsertClient(Client* head){
 
     char* errmsg = NULL;
 
-    if (rc = sqlite3_exec(db, sqlcmm1, NULL, 0, &errmsg)){
+    if ((rc = sqlite3_exec(db, sqlcmm1, NULL, 0, &errmsg))){
         printf("SQL error: %s\n", errmsg);
         sqlite3_free(errmsg);
         sqlite3_close(db);
@@ -37,9 +37,9 @@ int InsertClient(Client* head){
 
         char* tempcmm = "INSERT INTO Clients (Id, Name, Email, Password) "\
         "SELECT %ld, '%s', '%s', '%s' "\
-        "WHERE NOT EXISTS (SELECT 1 FROM Clients WHERE Id = %ld)";
+        "WHERE NOT EXISTS (SELECT 1 FROM Clients WHERE Id = %ld OR Email = '%s')";
 
-        sprintf(sqlcmm2, tempcmm, temp->id, temp->name, temp->email, temp->password, temp->id);
+        sprintf(sqlcmm2, tempcmm, temp->id, temp->name, temp->email, temp->password, temp->id, temp->email);
 
         if ((rc = sqlite3_exec(db, sqlcmm2, 0, 0, &errmsg)) == 1){
             printf("SQL error: %s\n", errmsg);
@@ -49,11 +49,57 @@ int InsertClient(Client* head){
             return 1;
         }
 
-        printf("Sucessfully inserted client!\n");
         free(sqlcmm2);
         temp = temp->next;
     }
 
     sqlite3_close(db);
+    FreeMem(head);
     return 0;
+}
+
+Client* ReadClient_Id(long int id){
+    Client* head = NULL;
+    sqlite3* db = NULL;
+    sqlite3_stmt* stmt = NULL;
+    int rc = 0;
+
+    if (sqlite3_open("./src/database.db", &db)){
+        printf("Database conection error!\n");
+        return NULL;
+    }
+
+    char* sqlcmm = "SELECT Id, Name, Email, Password FROM Clients "\
+    "WHERE Id = ?;";
+
+    if (sqlite3_prepare_v2(db, sqlcmm, -1, &stmt, NULL)){
+        printf("SQL error: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return NULL;
+    }
+
+    sqlite3_bind_int(stmt, 1, id);
+    printf("Searching client with Id: %ld...\n", id);
+    rc = sqlite3_step(stmt);
+
+    if (rc == SQLITE_ROW){
+        int returnedId = sqlite3_column_int(stmt, 0);
+        const char* returnedName = (const char*) sqlite3_column_text(stmt, 1);
+        const char* returnedEmail = (const char*) sqlite3_column_text(stmt, 2);
+        const char* returnedPassword = (const char*) sqlite3_column_text(stmt, 3);
+
+        head = Push(head, returnedId, returnedName, returnedEmail, returnedPassword);
+    }
+
+    else if (rc == SQLITE_DONE){
+        printf("No user found with id: %ld\n", id);
+    }
+
+    else{
+        printf("Execution error!");
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+    return head;
 }

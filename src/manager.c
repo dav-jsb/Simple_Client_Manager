@@ -4,8 +4,8 @@
 
 int main() {
     Client* head = NULL;
-    head = Push(head, 2, "tes", "testado@hotmail.com", "test1234");
-    InsertClient(head);
+    head = ReadClient_Id(1);
+    PrintList(head);
     FreeMem(head);
     return 0;
 }
