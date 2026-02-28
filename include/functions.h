@@ -14,4 +14,6 @@ int RemoveClient_Id(long int id);
 
 int RemoveClient_Email(const char* email);
 
+int EditName_Id(long int id, const char* newname);
+
 #endif
