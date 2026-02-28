@@ -244,7 +244,7 @@ int EditName_Id(long int id, const char* newname){
     const char* sqlcmm1 = "UPDATE Clients SET Name = ? WHERE Id = ?;";
 
     if (sqlite3_prepare_v2(db, sqlcmm1, -1, &stmt, NULL)){
-        printf("SQL error: %s", sqlite3_errmsg(db));
+        printf("SQL error: %s\n", sqlite3_errmsg(db));
         sqlite3_close(db);
         return 1;
     }
@@ -252,6 +252,8 @@ int EditName_Id(long int id, const char* newname){
     sqlite3_bind_text(stmt, 1, newname, -1, SQLITE_STATIC);
 
     sqlite3_bind_int64(stmt, 2, id);
+
+    printf("Searching client with id: %ld...\n", id);
 
     int rc = sqlite3_step(stmt);
 
@@ -266,7 +268,51 @@ int EditName_Id(long int id, const char* newname){
     }
 
     else{
-        printf("Execution error: %s", sqlite3_errmsg(db));
+        printf("Execution error: %s\n", sqlite3_errmsg(db));
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+    return 0;
+}
+
+int EditName_Email(const char* email, const char* newname){
+    sqlite3* db = NULL;
+    sqlite3_stmt* stmt = NULL;
+
+    if (sqlite3_open("./src/database.db", &db)){
+        printf("Database conection error!\n");
+        return 1;
+    }
+
+    const char* sqlcmm1 = "UPDATE Clients SET Name = ? WHERE Email = ?;";
+
+    if (sqlite3_prepare_v2(db, sqlcmm1, -1, &stmt, NULL)){
+        printf("SQL error: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return 1;
+    }
+
+    sqlite3_bind_text(stmt, 1, newname, -1, SQLITE_STATIC);
+
+    sqlite3_bind_text(stmt, 2, email, -1, SQLITE_STATIC);
+
+    printf("Searching client with email: %s...\n", email);
+
+    int rc = sqlite3_step(stmt);
+
+    if (rc == SQLITE_DONE){
+        if (sqlite3_changes(db) > 0){
+            printf("Sucessfully updated client!\n");
+        }
+
+        else{
+            printf("Client not found!\n");
+        }
+    }
+
+    else{
+        printf("Execution error: %s\n", sqlite3_errmsg(db));
     }
 
     sqlite3_finalize(stmt);
