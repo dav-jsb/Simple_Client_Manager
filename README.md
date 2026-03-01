@@ -43,7 +43,7 @@ Basic application developed in **C** and using **SQLITE** to manage a database w
 1. Clone the repository:
 
 ```bash
-https://github.com/dav-jsb/Gerenciador-Clientes-Simples.git
+git clone https://github.com/dav-jsb/Gerenciador-Clientes-Simples.git
 ```
 
 **OBS**: Make Sure you have a C compiler.
