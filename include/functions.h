@@ -18,10 +18,16 @@ int EditName_Id(long int id, const char* newname);
 
 int EditName_Email(const char* email, const char* newname);
 
+int EditPassword_Id(long int id, const char* newpassword);
+
+int EditPassword_Email(const char* email, const char* newpassword);
+
 typedef void (*Process)(void);
 
 void RegisterClient(void);
 
 void DeleteClient(void);
+
+void EditClient(void);
 
 #endif

@@ -7,7 +7,8 @@ int main() {
 
     Process table[] = {
         RegisterClient,
-        DeleteClient
+        DeleteClient,
+        EditClient
     };
 
     while (!finalize){
@@ -17,14 +18,15 @@ int main() {
         printf("--------------\n");
         printf("press 1 to register a client\n");
         printf("press 2 to delete a client\n");
-        printf("press 3 to finalize\n");
+        printf("press 3 to edit a client\n");
+        printf("press 4 to finalize\n");
         
-        while ((int)selector < 1 || (int)selector > 3){
+        while ((int)selector < 1 || (int)selector > 4){
             printf("type here: ");
             scanf(" %d", &selector);
         }
 
-        if (selector == 3) finalize = 1;
+        if (selector == 4) finalize = 1;
         
         else{
             table[selector - 1]();

@@ -334,6 +334,94 @@ int EditName_Email(const char* email, const char* newname){
     return 0;
 }
 
+int EditPassword_Id(long int id, const char* newpassword){
+    sqlite3* db = NULL;
+    sqlite3_stmt* stmt = NULL;
+
+    if (sqlite3_open("./src/database.db", &db)){
+        printf("Database conection error!\n");
+        return 1;
+    }
+
+    const char* sqlcmm1 = "UPDATE Clients SET Password = ? WHERE Id = ?;";
+
+    if (sqlite3_prepare_v2(db, sqlcmm1, -1, &stmt, NULL)){
+        printf("SQL error: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return 1;
+    }
+
+    sqlite3_bind_text(stmt, 1, newpassword, -1, SQLITE_STATIC);
+
+    sqlite3_bind_int64(stmt, 2, id);
+
+    printf("Searching client with id: %ld...\n", id);
+
+    int rc = sqlite3_step(stmt);
+
+    if (rc == SQLITE_DONE){
+        if (sqlite3_changes(db) > 0){
+            printf("Sucessfully updated client!\n");
+        }
+
+        else{
+            printf("Client not found!\n");
+        }
+    }
+
+    else{
+        printf("Execution error: %s\n", sqlite3_errmsg(db));
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+    return 0;
+}
+
+int EditPassword_Email(const char* email, const char* newpassword){
+    sqlite3* db = NULL;
+    sqlite3_stmt* stmt = NULL;
+
+    if (sqlite3_open("./src/database.db", &db)){
+        printf("Database conection error!\n");
+        return 1;
+    }
+
+    const char* sqlcmm1 = "UPDATE Clients SET Password = ? WHERE Email = ?;";
+
+    if (sqlite3_prepare_v2(db, sqlcmm1, -1, &stmt, NULL)){
+        printf("SQL error: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return 1;
+    }
+
+    sqlite3_bind_text(stmt, 1, newpassword, -1, SQLITE_STATIC);
+
+    sqlite3_bind_text(stmt, 2, email, -1, SQLITE_STATIC);
+
+    printf("Searching client with email: %s...\n", email);
+
+    int rc = sqlite3_step(stmt);
+
+    if (rc == SQLITE_DONE){
+        if (sqlite3_changes(db) > 0){
+            printf("Sucessfully updated client!\n");
+        }
+
+        else{
+            printf("Client not found!\n");
+        }
+    }
+
+    else{
+        printf("Execution error: %s\n", sqlite3_errmsg(db));
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+    return 0;
+}
+
 void RegisterClient(void){
     long int id = -1;
     char* name = NULL;
@@ -389,6 +477,7 @@ void RegisterClient(void){
     free(name);
     free(email);
     free(password);
+    printf("--------------\n");
 }
 
 void DeleteClient(void){
@@ -416,6 +505,7 @@ void DeleteClient(void){
         if (select == 1){
             printf("type here the id: ");
             scanf(" %ld", &id);
+            RemoveClient_Id(id);
         }
 
         else{
@@ -426,4 +516,100 @@ void DeleteClient(void){
     }
 
     free(email);
+    printf("--------------\n");
+}
+
+void EditClient(void){
+    int select = 0;
+    long int id = -1;
+    char* email = NULL;
+    char* newname = NULL;
+    char* newpassword = NULL;
+    int error = 0;
+
+    if ((email = (char*) malloc(sizeof(char) * 256)) == NULL ||
+        (newname = (char*) malloc(sizeof(char) * 256)) == NULL ||
+        (newpassword = (char*) malloc(sizeof(char) * 256)) == NULL
+    ){
+        printf("Memory allocation error!");
+        error = 1;
+        free(email);
+        free(newname);
+        free(newpassword);
+    }
+
+    if (!error){
+        printf("press 1 to edit name\n");
+        printf("press 2 to edit password\n");
+        
+        while((int)select < 1 || (int)select > 2){
+            printf("type here: ");
+            scanf(" %d", &select);
+        }
+
+        if (select == 1){
+            printf("press 1 to edit using id\n");
+            printf("press 2 to edit using email\n");
+
+            select = 0;
+
+            while((int)select < 1 || (int)select > 2){
+                printf("type here: ");
+                scanf(" %d", &select);
+            }
+
+            if (select == 1){
+                printf("type here id: ");
+                scanf(" %ld", &id);
+                printf("type here new name: ");
+                scanf(" %[^\n]", newname);
+
+                EditName_Id(id, newname);
+            }
+
+            else{
+                printf("type here email: ");
+                scanf(" %s", email);
+                printf("type here new name: ");
+                scanf(" %[^\n]", newname);
+
+                EditName_Email(email, newname);
+            }
+        }
+
+        else{
+            printf("press 1 to edit using id\n");
+            printf("press 2 to edit using email\n");
+
+            select = 0;
+
+            while((int)select < 1 || (int)select > 2){
+                printf("type here: ");
+                scanf(" %d", &select);
+            }
+
+            if (select == 1){
+                printf("type here id: ");
+                scanf(" %ld", &id);
+                printf("type here new password: ");
+                scanf(" %[^\n]", newpassword);
+
+                EditPassword_Id(id, newpassword);
+            }
+
+            else{
+                printf("type here email: ");
+                scanf(" %s", email);
+                printf("type here new password: ");
+                scanf(" %[^\n]", newname);
+
+                EditPassword_Email(email, newname);
+            }
+        }
+    }
+
+    free(email);
+    free(newname);
+    free(newpassword);
+    printf("--------------\n");
 }
