@@ -50,8 +50,24 @@ https://github.com/dav-jsb/Gerenciador-Clientes-Simples.git
 
 2. Compile the project:
 
-- In terminal, write: **make all**.
+- In terminal, write: 
+
+```bash
+make all
+```
+
+- If Linux, write:
+
+```bash
+make linux
+```
 
 3. Run the project:
 
-- Double click the file **ClientManager.exe** or write **make run** in terminal.
+- Double click the file **ClientManager.exe** or
+
+- In terminal, write:
+
+```bash
+make run
+```
