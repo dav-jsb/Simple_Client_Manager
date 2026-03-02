@@ -9,6 +9,7 @@ Basic application developed in **C** and using **SQLITE** to manage a database w
 - Client register
 - Edit client data
 - Delete client data
+- Consult client data
 - No graphical interface
 
 ---
