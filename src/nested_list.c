@@ -122,7 +122,8 @@ void PrintList(Client* head){
     else{
         Client* temp = head;
         while (temp != NULL){
-            printf("%ld %s %s %s\n", temp->id, temp->name, temp->email, temp->password);
+            printf("Id | Name | Email | Password\n");
+            printf("%ld | %s | %s | %s\n", temp->id, temp->name, temp->email, temp->password);
             temp = temp->next;
         }
     }

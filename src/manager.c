@@ -8,7 +8,8 @@ int main() {
     Process table[] = {
         RegisterClient,
         DeleteClient,
-        EditClient
+        EditClient,
+        ConsultClient
     };
 
     while (!finalize){
@@ -19,14 +20,16 @@ int main() {
         printf("press 1 to register a client\n");
         printf("press 2 to delete a client\n");
         printf("press 3 to edit a client\n");
-        printf("press 4 to finalize\n");
+        printf("press 4 to consult a client\n");
+        printf("press 5 to finalize\n");
+        printf("--------------\n");
         
-        while ((int)selector < 1 || (int)selector > 4){
+        while ((int)selector < 1 || (int)selector > 5){
             printf("type here: ");
             scanf(" %d", &selector);
         }
 
-        if (selector == 4) finalize = 1;
+        if (selector == 5) finalize = 1;
         
         else{
             table[selector - 1]();

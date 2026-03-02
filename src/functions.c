@@ -613,3 +613,64 @@ void EditClient(void){
     free(newpassword);
     printf("--------------\n");
 }
+
+void ConsultClient(void){
+    int selector = 0;
+    long int id = 0;
+    char* email = NULL;
+    int error = 0;
+    char finalize = 'a';
+
+    if ((email = (char*) malloc(sizeof(char) * 256)) == NULL){
+        printf("Memory allocation error!\n");
+        error = 1;
+    }
+
+    if (!error){
+        printf("press 1 to consult by id\n");
+        printf("press 2 to consult by email\n");
+        
+        while ((int)selector < 1 || (int) selector > 2){
+            printf("type here: ");
+            scanf(" %d", &selector);
+        }
+
+        Client* head = NULL;
+
+        if (selector == 1){
+            printf("type here the id: ");
+            scanf(" %ld", &id);
+
+            head = ReadClient_Id(id);
+            
+            if (head != NULL){
+                PrintList(head);
+            }
+
+            FreeMem(head);
+
+        }
+
+        else{
+            printf("type here the email: ");
+            scanf(" %s", email);
+
+            head = ReadClient_Email(email);
+
+            if (head != NULL){
+                PrintList(head);
+            }
+
+            FreeMem(head);
+        }
+
+        while (finalize != 'y'){
+            printf("press y to end consult: ");
+            scanf(" %c", &finalize);
+        }
+    }
+
+    printf("--------------\n");
+
+    free(email);
+}

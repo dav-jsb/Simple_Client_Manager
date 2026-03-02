@@ -30,4 +30,6 @@ void DeleteClient(void);
 
 void EditClient(void);
 
+void ConsultClient(void);
+
 #endif
